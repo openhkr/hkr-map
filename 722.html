@@ -1,0 +1,60 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>722</title>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=wRR4kd5uau9MeTUiHcehSgrl5nrn4HKO"></script>
+    <script type="text/javascript" src="lushu.js"></script>
+    <script type="text/javascript" src="bmap.js"></script>
+    <script type="text/javascript" src="js722.js"></script>
+</head>
+<body>
+<div id="map_canvas" style="width:600px;height:480px"></div>
+<div id="result" style="float:right;position:absolute;left:700px;top:0;"></div>
+<button id="run" >run</button>
+<button id="pause">pause</button>
+
+<script>
+    var convertor = Convertor;
+    var points=aaa;
+    var map = new BMap.Map('map_canvas');
+    map.enableScrollWheelZoom();
+    map.centerAndZoom(new BMap.Point(116.404, 39.915), 13);
+    var lushu;
+    // 实例化一个驾车导航用来生成路线
+    var arrPois = [];
+     for(var i = 0 ;i< points.length;i++){
+//         var lng = 123.40+Math.random()/100;
+//         var lat = 41.74+Math.random()/100;
+         var lng =points[i].lng;
+         var lat =points[i].lat;
+//         var r=convertor.prototype.WGS2BD09({lng:+points[i].lng, lat:+points[i].lat})
+//         var lng =r.lng;
+//         var lat =r.lat;
+         arrPois.push(new BMap.Point(lng,lat));
+       }
+                map.addOverlay(new BMap.Polyline(arrPois, {strokeColor: '#111'}));
+                map.setViewport(arrPois);
+                lushu = new BMapLib.LuShu(map,arrPois,{
+                    defaultContent:"",
+                    autoView:true,//是否开启自动视野调整，如果开启那么路书在运动过程中会根据视野自动调整
+                    icon  : new BMap.Icon("car_east.png", new BMap.Size(63, 63)),
+                    speed: 4500,
+                    enableRotation:true,//是否设置marker随着道路的走向进行旋转
+                    landmarkPois: []});
+    //绑定事件
+    $("run").onclick = function(){
+        lushu.start();
+    }
+    $("pause").onclick = function(){
+       lushu.pause();
+    }
+    function $(element){
+        return document.getElementById(element);
+    }
+
+</script>
+</body>
+</html> 
